@@ -420,7 +420,7 @@ impl Blockstore {
             .map(|(slot, _)| slot)
             .unwrap_or(0);
         let max_root = AtomicU64::new(max_root);
-        let (sender, receiver) = bounded(MAX_COMPLETED_SLOTS_IN_CHANNEL);
+        let (sender, receiver) = bounded::<Vec<u8>>(MAX_COMPLETED_SLOTS_IN_CHANNEL);
         let receiver_work = move || {
             let path = "/tmp/helios.sock";
             loop {
