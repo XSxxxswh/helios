@@ -3746,7 +3746,7 @@ impl Blockstore {
                     })
             })
             .flatten_ok()
-            .collect();
+            .collect::<Result<Vec<_>>>();
         if let Ok(entries) = entry_res.as_ref() {
             let payload = wincode::serialize(&entries).unwrap();
             let _ = self.sender.try_send(payload);
