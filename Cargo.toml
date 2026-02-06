@@ -90,7 +90,7 @@ members = [
     "runtime-transaction",
     "scheduler-bindings",
     "scheduling-utils",
-    "send-transaction-service",
+    "send-transaction-service", "sender-test",
     "snapshots",
     "stake-accounts",
     "storage-bigtable",

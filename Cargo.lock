@@ -6535,6 +6535,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "sender-test"
+version = "4.0.0-alpha.0"
+dependencies = [
+ "bincode",
+ "solana-entry",
+]
+
+[[package]]
 name = "seqlock"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
