@@ -2,6 +2,8 @@
 //! Proof of History ledger as well as iterative read, append write, and random
 //! access read to a persistent file-based ledger.
 
+use std::io::Write as _;
+use std::os::unix::net::UnixStream;
 #[cfg(feature = "dev-context-only-utils")]
 use trees::{Tree, TreeWalk};
 use {
@@ -273,6 +275,7 @@ pub struct Blockstore {
     completed_slots_senders: Mutex<Vec<CompletedSlotsSender>>,
     pub lowest_cleanup_slot: RwLock<Slot>,
     pub slots_stats: SlotsStats,
+    sender: Sender<Vec< /*Entry*/ u8>>
 }
 
 pub struct IndexMetaWorkingSetEntry {
@@ -417,7 +420,30 @@ impl Blockstore {
             .map(|(slot, _)| slot)
             .unwrap_or(0);
         let max_root = AtomicU64::new(max_root);
-
+        let (sender, receiver) = bounded(MAX_COMPLETED_SLOTS_IN_CHANNEL);
+        let receiver_work = move || {
+            let path = "/tmp/helios.sock";
+            loop {
+                let mut stream = match UnixStream::connect(&path) {
+                    Ok(stream) => stream,
+                    Err(e) => {
+                        error!("Error connect to helios.sock: {}", e);
+                        std::thread::sleep(std::time::Duration::from_millis(150));
+                        continue;
+                    }
+                };
+                while let Ok(data) = receiver.recv() {
+                    let len = data.len().to_le_bytes();
+                    if stream.write_all(len.as_ref()).is_err() || stream.write_all(data.as_ref()).is_err() {
+                        error!("error send entry via socket. Reconnect");
+                        break;
+                    }
+                }
+            }
+        };
+        std::thread::Builder::new()
+            .name("blockstore".to_string())
+            .spawn(receiver_work)?;
         measure.stop();
         info!("Opening blockstore done; {measure}");
         let blockstore = Blockstore {
@@ -450,6 +476,7 @@ impl Blockstore {
             max_root,
             lowest_cleanup_slot: RwLock::<Slot>::default(),
             slots_stats: SlotsStats::default(),
+            sender,
         };
         blockstore.cleanup_old_entries()?;
         blockstore.update_highest_primary_index_slot()?;
@@ -3697,7 +3724,7 @@ impl Blockstore {
                         BlockstoreError::MissingShred(slot, index)
                     })
                 });
-        completed_ranges
+        let entry_res = completed_ranges
             .into_iter()
             .map(|Range { start, end }| end - start)
             .map(|num_shreds| {
@@ -3719,7 +3746,12 @@ impl Blockstore {
                     })
             })
             .flatten_ok()
-            .collect()
+            .collect();
+        if let Ok(entries) = entry_res.as_ref() {
+            let payload = wincode::serialize(&entries).unwrap();
+            let _ = self.sender.try_send(payload);
+        }
+        entry_res
     }
 
     pub fn get_entries_in_data_block(
