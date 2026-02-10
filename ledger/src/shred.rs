@@ -429,6 +429,7 @@ impl Shred {
         })
     }
 
+
     /// Unique identifier for each shred.
     pub fn id(&self) -> ShredId {
         ShredId(self.slot(), self.index(), self.shred_type())
