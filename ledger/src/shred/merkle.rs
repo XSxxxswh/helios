@@ -87,6 +87,7 @@ impl Shred {
     dispatch!(pub fn payload(&self) -> &Payload);
     dispatch!(pub fn set_retransmitter_signature(&mut self, signature: &Signature) -> Result<(), Error>);
 
+
     #[inline]
     fn fec_set_index(&self) -> u32 {
         self.common_header().fec_set_index
