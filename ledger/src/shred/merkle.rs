@@ -51,9 +51,9 @@ const_assert_eq!(ShredCode::SIZE_OF_PAYLOAD, 1228);
 // the Merkle tree. The root of the Merkle tree is signed.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ShredData {
-    common_header: ShredCommonHeader,
-    data_header: DataShredHeader,
-    payload: Payload,
+    pub common_header: ShredCommonHeader,
+    pub data_header: DataShredHeader,
+    pub payload: Payload,
 }
 
 // Layout: {common, coding} headers | erasure coded shard
@@ -64,13 +64,13 @@ pub struct ShredData {
 // the Merkle tree. The root of the Merkle tree is signed.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct ShredCode {
-    common_header: ShredCommonHeader,
-    coding_header: CodingShredHeader,
-    payload: Payload,
+    pub common_header: ShredCommonHeader,
+    pub coding_header: CodingShredHeader,
+    pub payload: Payload,
 }
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub(crate) enum Shred {
+pub enum Shred {
     ShredCode(ShredCode),
     ShredData(ShredData),
 }

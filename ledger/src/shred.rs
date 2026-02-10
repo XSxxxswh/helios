@@ -254,31 +254,31 @@ enum ShredVariant {
 
 /// A common header that is present in data and code shred headers
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize, SchemaRead, SchemaWrite)]
-struct ShredCommonHeader {
+pub struct ShredCommonHeader {
     #[wincode(with = "Pod<_>")]
-    signature: Signature,
-    shred_variant: ShredVariant,
-    slot: Slot,
-    index: u32,
-    version: u16,
-    fec_set_index: u32,
+    pub signature: Signature,
+    pub shred_variant: ShredVariant,
+    pub slot: Slot,
+    pub index: u32,
+    pub version: u16,
+    pub fec_set_index: u32,
 }
 
 /// The data shred header has parent offset and flags
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize, SchemaRead, SchemaWrite)]
-struct DataShredHeader {
-    parent_offset: u16,
+pub struct DataShredHeader {
+    pub parent_offset: u16,
     #[wincode(with = "Pod<_>")]
-    flags: ShredFlags,
-    size: u16, // common shred header + data shred header + data
+    pub flags: ShredFlags,
+    pub size: u16, // common shred header + data shred header + data
 }
 
 /// The coding shred header has FEC information
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Deserialize, Serialize, SchemaRead, SchemaWrite)]
-struct CodingShredHeader {
-    num_data_shreds: u16,
-    num_coding_shreds: u16,
-    position: u16, // [0..num_coding_shreds)
+pub struct CodingShredHeader {
+    pub num_data_shreds: u16,
+    pub num_coding_shreds: u16,
+    pub position: u16, // [0..num_coding_shreds)
 }
 
 #[derive(Clone, Debug, PartialEq, Eq)]
@@ -390,7 +390,7 @@ macro_rules! dispatch {
 use dispatch;
 
 impl Shred {
-    dispatch!(fn common_header(&self) -> &ShredCommonHeader);
+    dispatch!(pub fn common_header(&self) -> &ShredCommonHeader);
     #[cfg(any(test, feature = "dev-context-only-utils"))]
     dispatch!(fn set_signature(&mut self, signature: Signature));
     dispatch!(fn signed_data(&self) -> Result<Hash, Error>);
