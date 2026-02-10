@@ -83,9 +83,9 @@ impl Shred {
     dispatch!(fn set_chained_merkle_root(&mut self, chained_merkle_root: &Hash) -> Result<(), Error>);
     dispatch!(fn set_signature(&mut self, signature: Signature));
     dispatch!(fn signed_data(&self) -> Result<Hash, Error>);
-    dispatch!(pub(super) fn common_header(&self) -> &ShredCommonHeader);
-    dispatch!(pub(super) fn payload(&self) -> &Payload);
-    dispatch!(pub(super) fn set_retransmitter_signature(&mut self, signature: &Signature) -> Result<(), Error>);
+    dispatch!(pub fn common_header(&self) -> &ShredCommonHeader);
+    dispatch!(pub fn payload(&self) -> &Payload);
+    dispatch!(pub fn set_retransmitter_signature(&mut self, signature: &Signature) -> Result<(), Error>);
 
     #[inline]
     fn fec_set_index(&self) -> u32 {
