@@ -75,7 +75,7 @@ use {
 };
 pub use {
     self::{
-        merkle::{ShredCode, ShredData, Shred as MerkleShred},
+        merkle::{ShredCode, ShredData, Shred as MerkleShred, recover as recover_merkle_shred},
         payload::Payload,
         stats::{ProcessShredsStats, ShredFetchStats},
     },
