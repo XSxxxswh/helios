@@ -84,7 +84,7 @@ dependencies = [
  "solana-epoch-schedule",
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-pubkey 4.0.0",
  "solana-sha256-hasher",
@@ -113,7 +113,7 @@ version = "4.0.0-alpha.0"
 dependencies = [
  "log",
  "solana-clock",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-signature",
  "solana-transaction",
  "solana-transaction-status",
@@ -144,7 +144,7 @@ dependencies = [
  "serde_yaml 0.9.34+deprecated",
  "solana-clap-utils",
  "solana-config-interface",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-message",
  "solana-pubkey 4.0.0",
@@ -192,7 +192,7 @@ dependencies = [
  "bincode",
  "bytemuck",
  "digest 0.10.7",
- "ed25519-dalek 1.0.1",
+ "ed25519-dalek",
  "hex",
  "libsecp256k1",
  "openssl",
@@ -273,7 +273,7 @@ dependencies = [
  "solana-accounts-db",
  "solana-clock",
  "solana-genesis-config",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-lattice-hash",
  "solana-measure",
  "solana-metrics",
@@ -313,7 +313,7 @@ dependencies = [
  "solana-epoch-rewards",
  "solana-epoch-schedule",
  "solana-fee-calculator",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keccak-hasher",
  "solana-last-restart-slot",
@@ -352,7 +352,7 @@ dependencies = [
  "agave-transaction-view",
  "bincode",
  "criterion",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-message",
@@ -419,7 +419,7 @@ dependencies = [
  "solana-genesis-utils",
  "solana-geyser-plugin-manager",
  "solana-gossip",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-inflation",
  "solana-keypair",
  "solana-ledger",
@@ -498,7 +498,7 @@ dependencies = [
  "solana-frozen-abi-macro",
  "solana-genesis-config",
  "solana-gossip",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-ledger",
  "solana-measure",
@@ -542,7 +542,7 @@ dependencies = [
  "solana-epoch-schedule",
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-pubkey 4.0.0",
  "tempfile",
 ]
@@ -558,7 +558,7 @@ dependencies = [
  "solana-clap-utils",
  "solana-cli-config",
  "solana-cli-output",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-metrics",
  "solana-native-token",
  "solana-notifier",
@@ -2278,19 +2278,6 @@ dependencies = [
 
 [[package]]
 name = "curve25519-dalek"
-version = "3.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b9fdf9972b2bd6af2d913799d9ebc165ea4d2e65878e329d9c6b372c4491b61"
-dependencies = [
- "byteorder",
- "digest 0.9.0",
- "rand_core 0.5.1",
- "subtle",
- "zeroize",
-]
-
-[[package]]
-name = "curve25519-dalek"
 version = "4.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "97fb8b7c4503de7d6ae7b42ab72a5a59857b4c937ec27a3d4539dba95b5ab2be"
@@ -2648,17 +2635,8 @@ dependencies = [
  "digest 0.10.7",
  "elliptic-curve",
  "rfc6979",
- "signature 2.2.0",
+ "signature",
  "spki",
-]
-
-[[package]]
-name = "ed25519"
-version = "1.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4620d40f6d2601794401d6dd95a5cf69b6c157852539470eeda433a99b3c0efc"
-dependencies = [
- "signature 1.4.0",
 ]
 
 [[package]]
@@ -2668,21 +2646,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "115531babc129696a58c64a4fef0a8bf9e9698629fb97e9e40767d235cfbcd53"
 dependencies = [
  "pkcs8",
- "signature 2.2.0",
-]
-
-[[package]]
-name = "ed25519-dalek"
-version = "1.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c762bae6dcaf24c4c84667b8579785430908723d5c889f469d76a41d59cc7a9d"
-dependencies = [
- "curve25519-dalek 3.2.0",
- "ed25519 1.2.0",
- "rand 0.7.3",
- "serde",
- "sha2 0.9.9",
- "zeroize",
+ "signature",
 ]
 
 [[package]]
@@ -2691,8 +2655,8 @@ version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "70e796c081cee67dc755e1a36a0a172b897fab85fc3f6bc48307991f64e4eca9"
 dependencies = [
- "curve25519-dalek 4.1.3",
- "ed25519 2.2.3",
+ "curve25519-dalek",
+ "ed25519",
  "rand_core 0.6.4",
  "serde",
  "sha2 0.10.9",
@@ -2707,7 +2671,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6b49a684b133c4980d7ee783936af771516011c8cd15f429dbda77245e282f03"
 dependencies = [
  "derivation-path",
- "ed25519-dalek 2.2.0",
+ "ed25519-dalek",
  "hmac 0.12.1",
  "sha2 0.10.9",
 ]
@@ -4325,7 +4289,7 @@ dependencies = [
  "elliptic-curve",
  "once_cell",
  "sha2 0.10.9",
- "signature 2.2.0",
+ "signature",
 ]
 
 [[package]]
@@ -6816,12 +6780,6 @@ dependencies = [
 
 [[package]]
 name = "signature"
-version = "1.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "02658e48d89f2bec991f9a78e69cfa4c316f8d6a6c4ec12fae1aeb263d486788"
-
-[[package]]
-name = "signature"
 version = "2.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "77549399552de45a898a580c1b41d445bf730df867cc44e6c0233bbc4b8329de"
@@ -6970,7 +6928,7 @@ dependencies = [
  "solana-config-interface",
  "solana-epoch-schedule",
  "solana-fee-calculator",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-loader-v3-interface",
  "solana-nonce",
@@ -7039,7 +6997,7 @@ dependencies = [
  "solana-core",
  "solana-faucet",
  "solana-gossip",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-local-cluster",
@@ -7111,7 +7069,7 @@ dependencies = [
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
  "solana-genesis-config",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-lattice-hash",
@@ -7168,7 +7126,7 @@ dependencies = [
  "borsh",
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "five8",
  "five8_const",
  "rand 0.9.2",
@@ -7222,7 +7180,7 @@ dependencies = [
  "solana-banks-server",
  "solana-clock",
  "solana-commitment-config",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-message",
  "solana-program-pack",
  "solana-pubkey 4.0.0",
@@ -7249,7 +7207,7 @@ dependencies = [
  "solana-account",
  "solana-clock",
  "solana-commitment-config",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-message",
  "solana-pubkey 4.0.0",
  "solana-signature",
@@ -7272,7 +7230,7 @@ dependencies = [
  "solana-client",
  "solana-clock",
  "solana-commitment-config",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-message",
  "solana-net-utils",
  "solana-pubkey 4.0.0",
@@ -7347,7 +7305,7 @@ dependencies = [
  "solana-bloom",
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-sanitize",
  "solana-sha256-hasher",
  "solana-signature",
@@ -7494,7 +7452,7 @@ dependencies = [
  "agave-feature-set",
  "solana-bpf-loader-program",
  "solana-compute-budget-program",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-loader-v4-program",
  "solana-program-runtime",
  "solana-pubkey 4.0.0",
@@ -7572,7 +7530,7 @@ dependencies = [
  "solana-cluster-type",
  "solana-commitment-config",
  "solana-derivation-path",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-message",
  "solana-native-token",
@@ -7604,7 +7562,7 @@ dependencies = [
  "solana-cluster-type",
  "solana-commitment-config",
  "solana-derivation-path",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-message",
  "solana-native-token",
@@ -7670,7 +7628,7 @@ dependencies = [
  "solana-feature-gate-interface",
  "solana-fee-calculator",
  "solana-fee-structure",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-loader-v3-interface",
@@ -7744,7 +7702,7 @@ dependencies = [
  "chrono",
  "clap 2.33.3",
  "console 0.16.2",
- "ed25519-dalek 1.0.1",
+ "ed25519-dalek",
  "humantime",
  "indicatif 0.18.3",
  "pretty-hex",
@@ -7758,7 +7716,7 @@ dependencies = [
  "solana-cli-config",
  "solana-clock",
  "solana-epoch-info",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-message",
  "solana-packet 4.0.0",
@@ -7798,7 +7756,7 @@ dependencies = [
  "solana-commitment-config",
  "solana-connection-cache",
  "solana-epoch-info",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-measure",
@@ -7940,7 +7898,7 @@ dependencies = [
  "solana-compute-budget",
  "solana-compute-budget-instruction",
  "solana-compute-budget-interface",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-message",
@@ -8117,7 +8075,7 @@ dependencies = [
  "solana-geyser-plugin-manager",
  "solana-gossip",
  "solana-hard-forks",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-leader-schedule",
@@ -8215,7 +8173,7 @@ dependencies = [
  "solana-fee-structure",
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-message",
@@ -8260,7 +8218,7 @@ checksum = "a2cb3f53e40375fba75e908295c7723d16dad3fb54384140366fade2c7ef37bb"
 dependencies = [
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "solana-define-syscall 3.0.0",
  "subtle",
  "thiserror 2.0.18",
@@ -8274,7 +8232,7 @@ checksum = "c0ee66a3e25ed8d20ed6fcd1ac71735415ff1edaf33ff1ec2118826eba927bcc"
 dependencies = [
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "solana-define-syscall 5.0.0",
  "subtle",
  "thiserror 2.0.18",
@@ -8338,7 +8296,7 @@ name = "solana-ed25519-program-tests"
 version = "4.0.0-alpha.0"
 dependencies = [
  "assert_matches",
- "ed25519-dalek 1.0.1",
+ "ed25519-dalek",
  "rand 0.9.2",
  "solana-ed25519-program",
  "solana-instruction",
@@ -8370,7 +8328,7 @@ dependencies = [
  "solana-bls-signatures",
  "solana-clock",
  "solana-entry",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-measure",
  "solana-merkle-tree",
@@ -8486,7 +8444,7 @@ dependencies = [
  "solana-cli-config",
  "solana-cli-output",
  "solana-faucet",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-message",
@@ -8692,7 +8650,7 @@ dependencies = [
  "log",
  "solana-download-utils",
  "solana-genesis-config",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-rpc-client",
  "thiserror 2.0.18",
 ]
@@ -8713,7 +8671,7 @@ dependencies = [
  "solana-accounts-db",
  "solana-clock",
  "solana-entry",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-ledger",
  "solana-pubkey 4.0.0",
  "solana-rpc",
@@ -8768,7 +8726,7 @@ dependencies = [
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
  "solana-gossip",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-ledger",
  "solana-measure",
@@ -8958,7 +8916,7 @@ version = "3.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5ac8be597c9e231b0cab2928ce3bc3e4ee77d9c0ad92977b9d901f3879f25a7a"
 dependencies = [
- "ed25519-dalek 2.2.0",
+ "ed25519-dalek",
  "ed25519-dalek-bip32",
  "five8",
  "rand 0.8.5",
@@ -9070,7 +9028,7 @@ dependencies = [
  "solana-frozen-abi-macro",
  "solana-genesis-config",
  "solana-genesis-utils",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-leader-schedule",
@@ -9230,7 +9188,7 @@ dependencies = [
  "solana-genesis-utils",
  "solana-gossip",
  "solana-hard-forks",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-leader-schedule",
  "solana-ledger",
@@ -9281,7 +9239,7 @@ version = "4.0.0-alpha.0"
 dependencies = [
  "fast-math",
  "hex",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-sha256-hasher",
 ]
 
@@ -9404,7 +9362,7 @@ dependencies = [
  "log",
  "reqwest 0.12.28",
  "serde_json",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
 ]
 
 [[package]]
@@ -9462,7 +9420,7 @@ dependencies = [
  "bv",
  "bytes",
  "caps",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "dlopen2",
  "fnv",
  "libc",
@@ -9475,7 +9433,7 @@ dependencies = [
  "solana-clock",
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-message",
  "solana-metrics",
@@ -9516,7 +9474,7 @@ dependencies = [
  "shuttle",
  "solana-clock",
  "solana-entry",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-leader-schedule",
  "solana-ledger",
@@ -9725,7 +9683,7 @@ dependencies = [
  "solana-fee-structure",
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-instruction-error",
  "solana-keypair",
@@ -9786,7 +9744,7 @@ dependencies = [
  "solana-epoch-schedule",
  "solana-fee-calculator",
  "solana-genesis-config",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-loader-v3-interface",
@@ -10015,7 +9973,7 @@ dependencies = [
  "solana-fee-structure",
  "solana-genesis-config",
  "solana-gossip",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-ledger",
@@ -10104,7 +10062,7 @@ dependencies = [
  "solana-epoch-info",
  "solana-epoch-schedule",
  "solana-feature-gate-interface",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-message",
@@ -10156,7 +10114,7 @@ dependencies = [
  "solana-clap-utils",
  "solana-commitment-config",
  "solana-fee-calculator",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-message",
  "solana-nonce",
@@ -10219,7 +10177,7 @@ dependencies = [
  "solana-clock",
  "solana-commitment-config",
  "solana-connection-cache",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-net-utils",
  "solana-pubkey 4.0.0",
@@ -10265,7 +10223,7 @@ dependencies = [
  "crossbeam-channel",
  "dashmap",
  "dir-diff",
- "ed25519-dalek 1.0.1",
+ "ed25519-dalek",
  "fnv",
  "im",
  "itertools 0.14.0",
@@ -10323,7 +10281,7 @@ dependencies = [
  "solana-frozen-abi-macro",
  "solana-genesis-config",
  "solana-hard-forks",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-inflation",
  "solana-instruction",
  "solana-instruction-error",
@@ -10404,7 +10362,7 @@ dependencies = [
  "solana-compute-budget",
  "solana-compute-budget-instruction",
  "solana-compute-budget-interface",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-message",
@@ -10543,7 +10501,7 @@ dependencies = [
  "solana-clock",
  "solana-fee-calculator",
  "solana-genesis-config",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-measure",
  "solana-metrics",
@@ -10631,7 +10589,7 @@ version = "3.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f4028aeedd443d80f1dccbf64872593a80e6a9676ee9007f6eccb63b65983ebd"
 dependencies = [
- "ed25519-dalek 2.2.0",
+ "ed25519-dalek",
  "five8",
  "rand 0.9.2",
  "serde",
@@ -10778,7 +10736,7 @@ dependencies = [
  "serde",
  "smpl_jwt",
  "solana-clock",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-message",
  "solana-metrics",
@@ -10809,7 +10767,7 @@ dependencies = [
  "protobuf-src",
  "serde",
  "solana-account-decoder",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-message",
  "solana-pubkey 4.0.0",
@@ -10881,7 +10839,7 @@ dependencies = [
  "ahash 0.8.12",
  "assert_matches",
  "bincode",
- "ed25519-dalek 1.0.1",
+ "ed25519-dalek",
  "env_logger",
  "libsecp256k1",
  "log",
@@ -10903,7 +10861,7 @@ dependencies = [
  "solana-fee-structure",
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-instructions-sysvar",
  "solana-keypair",
@@ -11051,7 +11009,7 @@ dependencies = [
 name = "solana-svm-transaction"
 version = "4.0.0-alpha.0"
 dependencies = [
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-message",
  "solana-nonce",
  "solana-pubkey 4.0.0",
@@ -11115,7 +11073,7 @@ dependencies = [
  "solana-bincode",
  "solana-compute-budget",
  "solana-fee-calculator",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-nonce",
  "solana-nonce-account",
@@ -11288,7 +11246,7 @@ dependencies = [
  "solana-cli-output",
  "solana-clock",
  "solana-commitment-config",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-message",
@@ -11327,7 +11285,7 @@ dependencies = [
  "solana-commitment-config",
  "solana-connection-cache",
  "solana-epoch-info",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-message",
  "solana-net-utils",
@@ -11476,7 +11434,7 @@ dependencies = [
  "solana-core",
  "solana-faucet",
  "solana-gossip",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-local-cluster",
@@ -11518,7 +11476,7 @@ dependencies = [
  "bincode",
  "log",
  "rand 0.9.2",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-packet 4.0.0",
  "solana-perf",
@@ -11546,7 +11504,7 @@ dependencies = [
  "solana-account-decoder",
  "solana-address-lookup-table-interface",
  "solana-clock",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-loader-v2-interface",
  "solana-loader-v3-interface",
@@ -11626,7 +11584,7 @@ dependencies = [
  "solana-entry",
  "solana-genesis-config",
  "solana-gossip",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-ledger",
  "solana-measure",
@@ -11704,7 +11662,7 @@ dependencies = [
  "solana-clock",
  "solana-cost-model",
  "solana-entry",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-ledger",
  "solana-metrics",
@@ -11763,7 +11721,7 @@ dependencies = [
  "solana-clock",
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-packet 4.0.0",
@@ -11832,7 +11790,7 @@ dependencies = [
  "solana-fee-calculator",
  "solana-frozen-abi",
  "solana-frozen-abi-macro",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-instruction",
  "solana-keypair",
  "solana-packet 4.0.0",
@@ -11876,7 +11834,7 @@ dependencies = [
  "solana-entry",
  "solana-genesis-utils",
  "solana-gossip",
- "solana-hash 3.1.0",
+ "solana-hash 4.0.1",
  "solana-keypair",
  "solana-ledger",
  "solana-net-utils",
@@ -11899,7 +11857,7 @@ dependencies = [
  "agave-feature-set",
  "bytemuck",
  "criterion",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "num-derive",
  "num-traits",
  "solana-instruction",
@@ -11939,7 +11897,7 @@ dependencies = [
  "bincode",
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "getrandom 0.2.15",
  "itertools 0.12.1",
  "js-sys",
@@ -11976,7 +11934,7 @@ dependencies = [
  "bincode",
  "bytemuck",
  "bytemuck_derive",
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "itertools 0.14.0",
  "merlin",
  "num-derive",
@@ -12162,7 +12120,7 @@ version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f63a2b41095945dc15274b924b21ccae9b3ec9dc2fdd43dbc08de8c33bbcd915"
 dependencies = [
- "curve25519-dalek 4.1.3",
+ "curve25519-dalek",
  "solana-zk-sdk 4.0.0",
  "thiserror 2.0.18",
 ]
