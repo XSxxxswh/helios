@@ -865,6 +865,150 @@ pub fn recover(
         .filter_map(Result::transpose))
 }
 
+
+pub fn recover_with_no_proof(
+    mut shreds: Vec<Shred>,
+    dst: &mut Vec<Shred>,
+    reed_solomon_cache: &ReedSolomonCache,
+) -> Result<(), Error> {
+    dst.clear();
+    // Sort shreds by their erasure shard index.
+    // In particular this places all data shreds before coding shreds.
+    let is_sorted = |(a, b)| cmp_shred_erasure_shard_index(a, b).is_le();
+    if !shreds.iter().tuple_windows().all(is_sorted) {
+        shreds.sort_unstable_by(cmp_shred_erasure_shard_index);
+    }
+    // Grab {common, coding} headers from the last coding shred.
+    // Incoming shreds are resigned immediately after signature verification,
+    // so we can just grab the retransmitter signature from one of the
+    // available shreds and attach it to the recovered shreds.
+    let (common_header, coding_header, _merkle_root, chained_merkle_root, retransmitter_signature) = {
+        // The last shred must be a coding shred by the above sorting logic.
+        let Some(Shred::ShredCode(shred)) = shreds.last() else {
+            return Err(Error::from(TooFewParityShards));
+        };
+        let position = u32::from(shred.coding_header.position);
+        let index = shred.common_header.index.checked_sub(position);
+        let common_header = ShredCommonHeader {
+            index: index.ok_or(Error::from(InvalidIndex))?,
+            ..shred.common_header
+        };
+        let coding_header = CodingShredHeader {
+            position: 0u16,
+            ..shred.coding_header
+        };
+        (
+            common_header,
+            coding_header,
+            shred.merkle_root()?,
+            shred.chained_merkle_root().ok(),
+            shred.retransmitter_signature().ok(),
+        )
+    };
+    debug_assert_matches!(common_header.shred_variant, ShredVariant::MerkleCode { .. });
+    let (proof_size, resigned) = match common_header.shred_variant {
+        ShredVariant::MerkleCode {
+            proof_size,
+            resigned,
+        } => (proof_size, resigned),
+        ShredVariant::MerkleData { .. } => {
+            return Err(Error::InvalidShredVariant);
+        }
+    };
+    debug_assert!(!resigned || retransmitter_signature.is_some());
+    // Verify that shreds belong to the same erasure batch
+    // and have consistent headers.
+    debug_assert!(shreds.iter().all(|shred| {
+        let ShredCommonHeader {
+            signature: _, // signature are verified further below.
+            shred_variant,
+            slot,
+            index: _,
+            version,
+            fec_set_index,
+        } = shred.common_header();
+        slot == &common_header.slot
+            && version == &common_header.version
+            && fec_set_index == &common_header.fec_set_index
+            && match shred {
+                Shred::ShredData(_) => {
+                    shred_variant
+                        == &ShredVariant::MerkleData {
+                            proof_size,
+                            resigned,
+                        }
+                }
+                Shred::ShredCode(shred) => {
+                    let CodingShredHeader {
+                        num_data_shreds,
+                        num_coding_shreds,
+                        position: _,
+                    } = shred.coding_header;
+                    shred_variant
+                        == &ShredVariant::MerkleCode {
+                            proof_size,
+                            resigned,
+                        }
+                        && num_data_shreds == coding_header.num_data_shreds
+                        && num_coding_shreds == coding_header.num_coding_shreds
+                }
+            }
+    }));
+    let num_data_shreds = usize::from(coding_header.num_data_shreds);
+    let num_coding_shreds = usize::from(coding_header.num_coding_shreds);
+    let num_shards = num_data_shreds + num_coding_shreds;
+    // Identify which shreds are missing and create stub shreds in their place.
+    let mut mask = vec![false; num_shards];
+    let shreds = {
+        let make_stub_shred = |erasure_shard_index| {
+            make_stub_shred(
+                erasure_shard_index,
+                &common_header,
+                &coding_header,
+                &chained_merkle_root,
+                &retransmitter_signature,
+            )
+        };
+        // By the sorting logic earlier above, this visits shreds in the order
+        // of their erasure shard index.
+        for shred in shreds {
+            // The leader signs the Merkle root and shreds in the same erasure
+            // batch have the same Merkle root. So the signatures are the same
+            // or shreds are not from the same erasure batch.
+            if shred.signature() != &common_header.signature {
+                return Err(Error::InvalidMerkleRoot);
+            }
+            let erasure_shard_index = shred.erasure_shard_index()?;
+            if !(dst.len()..num_shards).contains(&erasure_shard_index) {
+                return Err(Error::from(InvalidIndex));
+            }
+            // Push stub shreds as placeholder for the missing shreds in
+            // between.
+            while dst.len() < erasure_shard_index {
+                dst.push(make_stub_shred(dst.len())?);
+            }
+            mask[erasure_shard_index] = true;
+            dst.push(shred);
+        }
+        // Push stub shreds as placeholder for the missing shreds at the end.
+        while dst.len() < num_shards {
+            dst.push(make_stub_shred(dst.len())?);
+        }
+        dst
+    };
+    // Obtain erasure encoded shards from the shreds and reconstruct shreds.
+    let mut shards = shreds
+        .iter_mut()
+        .zip(&mask)
+        .map(|(shred, &mask)| Ok((shred.erasure_shard_mut()?, mask)))
+        .collect::<Result<Vec<_>, Error>>()?;
+    reed_solomon_cache
+        .get(num_data_shreds, num_coding_shreds)?
+        .reconstruct(&mut shards)?;
+    // Drop the mut guards to allow further mutation below.
+    drop(shards);
+    Ok(())
+}
 // Compares shreds of the same erasure batch by their erasure shard index
 // within the erasure batch.
 #[inline]
