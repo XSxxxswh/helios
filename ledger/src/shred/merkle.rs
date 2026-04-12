@@ -867,93 +867,36 @@ pub fn recover(
 
 
 pub fn recover_with_no_proof(
-    mut shreds: Vec<Shred>,
+    shreds: impl Iterator<Item = Shred>,
+    code_shred: &ShredCode,
     dst: &mut Vec<Shred>,
     reed_solomon_cache: &ReedSolomonCache,
 ) -> Result<(), Error> {
     dst.clear();
-    // Sort shreds by their erasure shard index.
-    // In particular this places all data shreds before coding shreds.
-    let is_sorted = |(a, b)| cmp_shred_erasure_shard_index(a, b).is_le();
-    if !shreds.iter().tuple_windows().all(is_sorted) {
-        shreds.sort_unstable_by(cmp_shred_erasure_shard_index);
-    }
     // Grab {common, coding} headers from the last coding shred.
     // Incoming shreds are resigned immediately after signature verification,
     // so we can just grab the retransmitter signature from one of the
     // available shreds and attach it to the recovered shreds.
     let (common_header, coding_header, _merkle_root, chained_merkle_root, retransmitter_signature) = {
         // The last shred must be a coding shred by the above sorting logic.
-        let Some(Shred::ShredCode(shred)) = shreds.last() else {
-            return Err(Error::from(TooFewParityShards));
-        };
-        let position = u32::from(shred.coding_header.position);
-        let index = shred.common_header.index.checked_sub(position);
+        let position = u32::from(code_shred.coding_header.position);
+        let index = code_shred.common_header.index.checked_sub(position);
         let common_header = ShredCommonHeader {
             index: index.ok_or(Error::from(InvalidIndex))?,
-            ..shred.common_header
+            ..code_shred.common_header
         };
         let coding_header = CodingShredHeader {
             position: 0u16,
-            ..shred.coding_header
+            ..code_shred.coding_header
         };
         (
             common_header,
             coding_header,
-            shred.merkle_root()?,
-            shred.chained_merkle_root().ok(),
-            shred.retransmitter_signature().ok(),
+            code_shred.merkle_root()?,
+            code_shred.chained_merkle_root().ok(),
+            code_shred.retransmitter_signature().ok(),
         )
     };
-    debug_assert_matches!(common_header.shred_variant, ShredVariant::MerkleCode { .. });
-    let (proof_size, resigned) = match common_header.shred_variant {
-        ShredVariant::MerkleCode {
-            proof_size,
-            resigned,
-        } => (proof_size, resigned),
-        ShredVariant::MerkleData { .. } => {
-            return Err(Error::InvalidShredVariant);
-        }
-    };
-    debug_assert!(!resigned || retransmitter_signature.is_some());
-    // Verify that shreds belong to the same erasure batch
-    // and have consistent headers.
-    debug_assert!(shreds.iter().all(|shred| {
-        let ShredCommonHeader {
-            signature: _, // signature are verified further below.
-            shred_variant,
-            slot,
-            index: _,
-            version,
-            fec_set_index,
-        } = shred.common_header();
-        slot == &common_header.slot
-            && version == &common_header.version
-            && fec_set_index == &common_header.fec_set_index
-            && match shred {
-                Shred::ShredData(_) => {
-                    shred_variant
-                        == &ShredVariant::MerkleData {
-                            proof_size,
-                            resigned,
-                        }
-                }
-                Shred::ShredCode(shred) => {
-                    let CodingShredHeader {
-                        num_data_shreds,
-                        num_coding_shreds,
-                        position: _,
-                    } = shred.coding_header;
-                    shred_variant
-                        == &ShredVariant::MerkleCode {
-                            proof_size,
-                            resigned,
-                        }
-                        && num_data_shreds == coding_header.num_data_shreds
-                        && num_coding_shreds == coding_header.num_coding_shreds
-                }
-            }
-    }));
     let num_data_shreds = usize::from(coding_header.num_data_shreds);
     let num_coding_shreds = usize::from(coding_header.num_coding_shreds);
     let num_shards = num_data_shreds + num_coding_shreds;
