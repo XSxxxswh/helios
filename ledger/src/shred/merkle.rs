@@ -950,6 +950,18 @@ pub fn recover_with_no_proof(
         .reconstruct(&mut shards)?;
     // Drop the mut guards to allow further mutation below.
     drop(shards);
+    // Deserialize data headers for recovered data shreds.
+    for (shred, &mask) in dst.iter_mut().zip(&mask) {
+        if !mask {
+            if let Shred::ShredData(shred) = shred {
+                let (common_header, data_header) = wincode::deserialize(&shred.payload[..])?;
+                if shred.common_header != common_header {
+                    return Err(Error::InvalidRecoveredShred);
+                }
+                shred.data_header = data_header;
+            }
+        }
+    }
     Ok(())
 }
 // Compares shreds of the same erasure batch by their erasure shard index
