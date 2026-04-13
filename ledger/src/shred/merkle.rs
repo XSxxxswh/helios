@@ -951,7 +951,7 @@ pub fn recover_with_no_proof(
     // Drop the mut guards to allow further mutation below.
     drop(shards);
     // Deserialize data headers for recovered data shreds.
-    for (shred, &mask) in dst.iter_mut().zip(&mask) {
+    for (shred, &mask) in shreds.iter_mut().zip(&mask) {
         if !mask {
             if let Shred::ShredData(shred) = shred {
                 let (common_header, data_header) = wincode::deserialize(&shred.payload[..])?;
